@@ -1,0 +1,23 @@
+# WAHA Docker Compose file - exposes on host port 3001
+# Source: Official WAHA documentation [web:1][web:2]
+services:
+  waha:
+    restart: always
+    image: devlikeapro/waha:latest  # Use core free version; change to devlikeapro/waha-plus for premium
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '100m'
+        max-file: '10'
+    ports:
+      - '127.0.0.1:3001:3000/tcp'  # Maps container port 3000 to host port 3001 (localhost only for security)
+    volumes:
+      # Persistent session storage
+      - './sessions:/app/.sessions'
+      # Persistent media storage
+      - './.media:/app/.media'
+    env_file:
+      - .env  # Create this file with WAHA_API_KEY, WAHA_DASHBOARD_USERNAME, etc.
+
+volumes:
+  # Named volumes for optional DB services (uncomment if needed)
